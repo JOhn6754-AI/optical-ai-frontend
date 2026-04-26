@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { API_URL } from "../App";
 
 export default function BusinessManager({ onSelect }) {
   const [businesses, setBusinesses] = useState([]);
@@ -14,9 +15,8 @@ export default function BusinessManager({ onSelect }) {
 
   const load = async () => {
     try {
-      const res = await fetch("http://localhost:8000/businesses");
-      const data = await res.json();
-      setBusinesses(data);
+      const res = await fetch(`${API_URL}/businesses`);
+      setBusinesses(await res.json());
     } catch (e) {
       console.error("Could not load businesses", e);
     }
@@ -28,7 +28,7 @@ export default function BusinessManager({ onSelect }) {
     if (!form.name || !form.home_address) return;
     setSaving(true);
     try {
-      await fetch("http://localhost:8000/businesses", {
+      await fetch(`${API_URL}/businesses`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -36,8 +36,6 @@ export default function BusinessManager({ onSelect }) {
       setForm({ name: "", home_address: "", hourly_labor_cost: 85, profitable_threshold: 120, marginal_threshold: 75 });
       setShowForm(false);
       load();
-    } catch (e) {
-      console.error("Save failed", e);
     } finally {
       setSaving(false);
     }
@@ -45,7 +43,7 @@ export default function BusinessManager({ onSelect }) {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this business?")) return;
-    await fetch(`http://localhost:8000/businesses/${id}`, { method: "DELETE" });
+    await fetch(`${API_URL}/businesses/${id}`, { method: "DELETE" });
     load();
   };
 
@@ -54,7 +52,7 @@ export default function BusinessManager({ onSelect }) {
       <div className="biz-header">
         <div>
           <h2 className="section-title">Saved Businesses</h2>
-          <p className="biz-sub">Save a business's settings once — load them instantly for every future analysis.</p>
+          <p className="biz-sub">Save a business once — load their settings instantly for every future analysis.</p>
         </div>
         <button className="add-biz-btn" onClick={() => setShowForm(!showForm)}>
           {showForm ? "✕ Cancel" : "+ Add Business"}
@@ -65,32 +63,22 @@ export default function BusinessManager({ onSelect }) {
         <div className="biz-form">
           <h3 className="form-section-title">New Business</h3>
           <div className="form-row">
-            <label>
-              Business Name
-              <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
-                placeholder="Flathead HVAC Services" />
+            <label>Business Name
+              <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Flathead HVAC Services" />
             </label>
-            <label>
-              Home Base Address
-              <input value={form.home_address} onChange={e => setForm({ ...form, home_address: e.target.value })}
-                placeholder="506 Main St Kalispell MT 59901" />
+            <label>Home Base Address
+              <input value={form.home_address} onChange={e => setForm({ ...form, home_address: e.target.value })} placeholder="506 Main St Kalispell MT 59901" />
             </label>
           </div>
           <div className="form-row">
-            <label>
-              Hourly Labor Cost ($)
-              <input type="number" value={form.hourly_labor_cost}
-                onChange={e => setForm({ ...form, hourly_labor_cost: parseFloat(e.target.value) })} />
+            <label>Hourly Labor Cost ($)
+              <input type="number" value={form.hourly_labor_cost} onChange={e => setForm({ ...form, hourly_labor_cost: parseFloat(e.target.value) })} />
             </label>
-            <label>
-              Profitable Threshold ($/hr)
-              <input type="number" value={form.profitable_threshold}
-                onChange={e => setForm({ ...form, profitable_threshold: parseFloat(e.target.value) })} />
+            <label>Profitable Threshold ($/hr)
+              <input type="number" value={form.profitable_threshold} onChange={e => setForm({ ...form, profitable_threshold: parseFloat(e.target.value) })} />
             </label>
-            <label>
-              Marginal Threshold ($/hr)
-              <input type="number" value={form.marginal_threshold}
-                onChange={e => setForm({ ...form, marginal_threshold: parseFloat(e.target.value) })} />
+            <label>Marginal Threshold ($/hr)
+              <input type="number" value={form.marginal_threshold} onChange={e => setForm({ ...form, marginal_threshold: parseFloat(e.target.value) })} />
             </label>
           </div>
           <button className="eval-btn" onClick={handleSave} disabled={saving || !form.name || !form.home_address}>
@@ -103,7 +91,7 @@ export default function BusinessManager({ onSelect }) {
         <div className="empty-state">
           <div className="empty-icon">🏢</div>
           <p>No businesses saved yet.</p>
-          <p className="empty-sub">Add your first business to save their settings and track them over time.</p>
+          <p className="empty-sub">Add your first business to save their settings.</p>
         </div>
       )}
 
@@ -121,12 +109,8 @@ export default function BusinessManager({ onSelect }) {
               </div>
             </div>
             <div className="biz-card-actions">
-              <button className="select-btn" onClick={() => onSelect(biz)}>
-                Load for Analysis →
-              </button>
-              <button className="delete-btn" onClick={() => handleDelete(biz.id)}>
-                Delete
-              </button>
+              <button className="select-btn" onClick={() => onSelect(biz)}>Load for Analysis →</button>
+              <button className="delete-btn" onClick={() => handleDelete(biz.id)}>Delete</button>
             </div>
           </div>
         ))}

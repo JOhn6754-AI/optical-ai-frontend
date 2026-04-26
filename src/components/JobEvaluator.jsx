@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../App";
 
 const COLORS = { GREEN: "#22c55e", YELLOW: "#f59e0b", RED: "#ef4444" };
 const ICONS = { ACCEPT: "✓", COUNTER: "↔", DECLINE: "✕" };
@@ -23,7 +24,7 @@ export default function JobEvaluator({ config }) {
     setError(null);
     setResult(null);
     try {
-      const res = await fetch("http://localhost:8000/evaluate-job", {
+      const res = await fetch(`${API_URL}/evaluate-job`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -51,10 +52,7 @@ export default function JobEvaluator({ config }) {
   return (
     <div className="evaluator">
       <h2 className="section-title">Should I Take This Job?</h2>
-      <p className="evaluator-sub">
-        Enter a new job request and get an instant accept / counter / decline
-        recommendation based on real drive time from your home base.
-      </p>
+      <p className="evaluator-sub">Enter a new job request for an instant accept / counter / decline recommendation.</p>
 
       <div className="eval-form">
         <div className="form-row">
@@ -66,14 +64,8 @@ export default function JobEvaluator({ config }) {
           </label>
         </div>
         <div className="form-row">
-          <label>
-            Job Address (full address works best)
-            <input
-              name="address"
-              value={form.address}
-              onChange={handleChange}
-              placeholder="789 Whitefish Stage Rd Kalispell MT 59901"
-            />
+          <label>Job Address (full address)
+            <input name="address" value={form.address} onChange={handleChange} placeholder="789 Whitefish Stage Rd Kalispell MT 59901" />
           </label>
         </div>
         <div className="form-row">
@@ -83,16 +75,14 @@ export default function JobEvaluator({ config }) {
           <label>Quoted Price ($)
             <input type="number" name="revenue" value={form.revenue} onChange={handleChange} placeholder="450" />
           </label>
-          <label>Est. Duration (hours)
+          <label>Duration (hours)
             <input type="number" name="duration_hours" value={form.duration_hours} onChange={handleChange} placeholder="2.5" step="0.5" />
           </label>
         </div>
-
         <div className="home-base-info">
           📍 Home base: <strong>{config.home_address}</strong>
-          <span className="home-base-note"> — change this in Business Settings on the Upload page</span>
+          <span className="home-base-note"> — change in Business Settings on Upload page</span>
         </div>
-
         <button className="eval-btn" onClick={handleSubmit} disabled={loading || !isValid}>
           {loading ? "Calculating real drive time..." : "Evaluate This Job →"}
         </button>
@@ -108,22 +98,10 @@ export default function JobEvaluator({ config }) {
           </div>
           <p className="eval-reason">{result.reason}</p>
           <div className="eval-stats">
-            <div>
-              <span>Effective Rate</span>
-              <strong style={{ color }}>${result.gross_per_hour}/hr</strong>
-            </div>
-            <div>
-              <span>Drive Time</span>
-              <strong>{result.drive_time_hours}hr</strong>
-            </div>
-            <div>
-              <span>Total Time</span>
-              <strong>{result.total_time_hours}hr</strong>
-            </div>
-            <div>
-              <span>Est. Profit</span>
-              <strong style={{ color }}>${result.estimated_profit}</strong>
-            </div>
+            <div><span>Effective Rate</span><strong style={{ color }}>${result.gross_per_hour}/hr</strong></div>
+            <div><span>Drive Time</span><strong>{result.drive_time_hours}hr</strong></div>
+            <div><span>Total Time</span><strong>{result.total_time_hours}hr</strong></div>
+            <div><span>Est. Profit</span><strong style={{ color }}>${result.estimated_profit}</strong></div>
           </div>
           {result.geocoding === "real" && (
             <div className="geocoding-badge">✓ Real drive time via OpenStreetMap</div>
