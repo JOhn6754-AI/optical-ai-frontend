@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import CSVTemplateDropdown from "./CSVTemplateDropdown";
 
 export default function Uploader({ onUpload, loading, error }) {
   const [dragging, setDragging] = useState(false);
@@ -73,6 +74,10 @@ export default function Uploader({ onUpload, loading, error }) {
             </p>
           </div>
         )}
+      </div>
+      
+      <div style={{ marginTop: 12 }}>
+        <CSVTemplateDropdown />
       </div>
 
       {error && (
