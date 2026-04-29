@@ -202,6 +202,11 @@ const LEAFLET_DARK_CSS = `
     border: 1px solid #374151 !important;
     box-shadow: none !important;
   }
+  .leaflet-top,
+  .leaflet-bottom,
+  .leaflet-control {
+    z-index: 400 !important;
+  }
 `;
 
 function RouteMap({ days }) {
