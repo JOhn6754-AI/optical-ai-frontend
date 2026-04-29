@@ -180,6 +180,30 @@ function OptimizationPanel({ optimization }) {
   );
 }
 
+const LEAFLET_DARK_CSS = `
+  .leaflet-control-zoom a {
+    background: #1f2937 !important;
+    color: #f9fafb !important;
+    border-color: #374151 !important;
+  }
+  .leaflet-control-zoom a:hover {
+    background: #374151 !important;
+    color: #fff !important;
+  }
+  .leaflet-control-attribution {
+    background: rgba(15,15,15,0.75) !important;
+    color: #4b5563 !important;
+    font-size: 9px !important;
+  }
+  .leaflet-control-attribution a {
+    color: #6b7280 !important;
+  }
+  .leaflet-bar {
+    border: 1px solid #374151 !important;
+    box-shadow: none !important;
+  }
+`;
+
 function RouteMap({ days }) {
   const allJobs = days.flatMap(d => d.jobs).filter(j => j.lat && j.lng);
   if (allJobs.length === 0) return null;
@@ -187,6 +211,7 @@ function RouteMap({ days }) {
   const avgLng = allJobs.reduce((s, j) => s + j.lng, 0) / allJobs.length;
   return (
     <section style={{ marginBottom: 32 }}>
+      <style>{LEAFLET_DARK_CSS}</style>
       <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 600, color: "#f9fafb", textTransform: "uppercase", letterSpacing: "0.06em" }}>Job Map</h3>
       <div style={{ borderRadius: 12, overflow: "hidden", border: "1px solid #1f2937", height: 360 }}>
         <MapContainer center={[avgLat, avgLng]} zoom={10} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false}>
