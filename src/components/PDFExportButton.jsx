@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { jsPDF } from "jspdf";
-import "jspdf-autotable";
+import autoTable from "jspdf-autotable"
 
 /**
  * PDFExportButton
@@ -173,7 +173,7 @@ export default function PDFExportButton({ jobs = [], insights = [], optimization
       };
     });
 
-    doc.autoTable({
+    autoTable(doc, {
       startY: curY,
       head: [["Job ID", "Customer", "Type", "Date", "Revenue", "Score"]],
       body: tableRows.map((r) => r.row),
