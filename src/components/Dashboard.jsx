@@ -24,6 +24,7 @@ function JobModal({ job, onClose }) {
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 24 }}>
       <div onClick={e => e.stopPropagation()} style={{ background: "#141414", border: "1px solid #2a2a2a", borderRadius: 16, padding: 32, width: "100%", maxWidth: 480, position: "relative" }}>
+      <PDFExportButton jobs={days.flatMap(d => d.jobs)} insights={insights} optimization={optimization} businessName={businessName} />
         <button onClick={onClose} style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", color: "#6b7280", fontSize: 20, cursor: "pointer", lineHeight: 1 }}>&#x2715;</button>
         <div style={{ marginBottom: 20 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
@@ -269,7 +270,6 @@ export default function Dashboard({ data, businessName, onReset }) {
           {data.geocoding === "real" && (
             <span style={{ fontSize: 12, color: "#22c55e", background: "#22c55e12", border: "1px solid #22c55e33", padding: "4px 10px", borderRadius: 6 }}>&#10003; Real drive times</span>
           )}
-          <PDFExportButton jobs={days.flatMap(d => d.jobs)} insights={insights} optimization={optimization} businessName={businessName} />
           <button onClick={onReset} style={{ background: "#1f2937", border: "1px solid #374151", color: "#9ca3af", padding: "8px 16px", borderRadius: 8, cursor: "pointer", fontSize: 13 }}>&#8593; New Upload</button>
         </div>
       </div>
