@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import PDFExportButton from "./PDFExportButton";
 
 const COLORS = { GREEN: "#22c55e", YELLOW: "#f59e0b", RED: "#ef4444" };
 const BG     = { GREEN: "#22c55e18", YELLOW: "#f59e0b18", RED: "#ef444418" };
@@ -268,6 +269,7 @@ export default function Dashboard({ data, businessName, onReset }) {
           {data.geocoding === "real" && (
             <span style={{ fontSize: 12, color: "#22c55e", background: "#22c55e12", border: "1px solid #22c55e33", padding: "4px 10px", borderRadius: 6 }}>&#10003; Real drive times</span>
           )}
+          <PDFExportButton jobs={days.flatMap(d => d.jobs)} insights={insights} optimization={optimization} businessName={businessName} />
           <button onClick={onReset} style={{ background: "#1f2937", border: "1px solid #374151", color: "#9ca3af", padding: "8px 16px", borderRadius: 8, cursor: "pointer", fontSize: 13 }}>&#8593; New Upload</button>
         </div>
       </div>
